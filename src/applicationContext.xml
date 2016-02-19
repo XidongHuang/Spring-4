@@ -3,11 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 
 
-	<context:component-scan base-package="com.tony.spring.jdbc"></context:component-scan>
+	<context:component-scan base-package="com.tony.spring"></context:component-scan>
 
 	<!-- Import properties -->
 	<context:property-placeholder location="classpath:db.properties"/>
@@ -34,10 +36,15 @@
 	<!-- Configuration "namedparam.NamedParameterJdbcTemplate", this object can use parameters with name, because it does not have empty constructor-->
 	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource"></constructor-arg>
-	
-	
 	</bean>
 	
-	
+	<!-- Configure transaction manager -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- Transaction annotation -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
 
 </beans>
